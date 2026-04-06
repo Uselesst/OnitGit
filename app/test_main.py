@@ -3,10 +3,33 @@ import os
 
 sys.path.insert(0, os.path.dirname(__file__))
 
-from fastapi.testclient import TestClient
-from main import app
+# Временно заменяем относительные импорты на абсолютные
+import importlib.util
+import inspect
 
-client = TestClient(app)
+# Загружаем database вручную
+spec = importlib.util.spec_from_file_location("database", os.path.join(os.path.dirname(__file__), "database.py"))
+database = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(database)
+
+# Загружаем models
+spec = importlib.util.spec_from_file_location("models", os.path.join(os.path.dirname(__file__), "models.py"))
+models = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(models)
+
+# Загружаем health
+spec = importlib.util.spec_from_file_location("health", os.path.join(os.path.dirname(__file__), "health.py"))
+health = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(health)
+
+# Загружаем main
+spec = importlib.util.spec_from_file_location("main", os.path.join(os.path.dirname(__file__), "main.py"))
+main = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(main)
+
+from fastapi.testclient import TestClient
+
+client = TestClient(main.app)
 
 def test_healthcheck():
     response = client.get("/health")
