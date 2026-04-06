@@ -35,13 +35,16 @@ jobs:
     
     - name: Install dependencies
       run: |
-        pip install -r requirements.txt
+        python -m pip install --upgrade pip
+        pip install fastapi uvicorn sqlalchemy psycopg2-binary python-dotenv
+        pip install pytest httpx
     
     - name: Run tests
       env:
         DATABASE_URL: postgresql://${{ secrets.DB_USER }}:${{ secrets.DB_PASSWORD }}@localhost:5432/${{ secrets.DB_NAME }}
       run: |
-        pytest app/test_main.py -v
+        cd app
+        pytest test_main.py -v
     
     - name: Docker build test
       run: |
