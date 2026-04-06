@@ -1,8 +1,10 @@
 from fastapi import APIRouter
 from sqlalchemy import text
-from .database import SessionLocal
+from database import SessionLocal
+
 
 router = APIRouter()
+
 
 @router.get("/health")
 def healthcheck():
@@ -13,4 +15,3 @@ def healthcheck():
         return {"status": "ok", "database": "connected"}
     except Exception as e:
         return {"status": "fail", "error": str(e)}
-    
