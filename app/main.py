@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
-from database import SessionLocal, engine
-import models
-from health import router as health_router
+from .database import SessionLocal, engine
+from . import models
+from .health import router as health_router
 
 
 models.Base.metadata.create_all(bind=engine)

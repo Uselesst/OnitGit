@@ -1,7 +1,6 @@
 import sys
 import os
 
-# Добавляем папку app в путь импорта
 sys.path.insert(0, os.path.dirname(__file__))
 
 from fastapi.testclient import TestClient
